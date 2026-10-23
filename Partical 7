@@ -1,0 +1,44 @@
+n = int(input("Enter number of processes: "))
+
+bt = []
+rem_bt = []
+wt = [0] * n
+tat = [0] * n
+
+for i in range(n):
+    b = int(input(f"Enter burst time for P{i+1}: "))
+    bt.append(b)
+    rem_bt.append(b)
+
+quantum = int(input("Enter time quantum: "))
+
+time = 0
+
+while True:
+    done = True
+
+    for i in range(n):
+        if rem_bt[i] > 0:
+            done = False
+
+            if rem_bt[i] > quantum:
+                time += quantum
+                rem_bt[i] -= quantum
+            else:
+                time += rem_bt[i]
+                wt[i] = time - bt[i]
+                rem_bt[i] = 0
+
+    if done:
+        break
+
+for i in range(n):
+    tat[i] = bt[i] + wt[i]
+
+print("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time")
+
+for i in range(n):
+    print(f"P{i+1}\t{bt[i]}\t\t{wt[i]}\t\t{tat[i]}")
+
+print("\nAverage Waiting Time =", sum(wt) / n)
+print("Average Turnaround Time =", sum(tat) / n)
